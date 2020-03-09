@@ -1,0 +1,48 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "dev": "ts-node-dev --no-notify --ignore-watch node_modules lib/server.ts",
+    "migrate:up": "knex migrate:latest --env dev",
+    "migrate:down": "knex migrate:rollback --all --env dev",
+    "generate": "graphql-codegen --config codegen.yml"
+  },
+  "keywords": [
+    "graphql",
+    "apollo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-datasource-rest": "^0.8.0",
+    "apollo-server-express": "2.9.6",
+    "express": "4.17.1",
+    "fast-xml-parser": "3.16.0",
+    "got": "10.6.0",
+    "knex": "0.20.11",
+    "lodash.merge": "4.6.2",
+    "pg": "7.18.2"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.8.1",
+    "@graphql-codegen/typescript": "1.8.1",
+    "@graphql-codegen/typescript-resolvers": "1.8.1",
+    "@iteam/eslint-config-node": "0.3.0",
+    "@types/lodash.merge": "4.6.6",
+    "@typescript-eslint/eslint-plugin": "2.22.0",
+    "@typescript-eslint/parser": "2.22.0",
+    "eslint": "6.8.0",
+    "husky": "4.2.3",
+    "jest": "25.1.0",
+    "jest-watch-typeahead": "0.4.2",
+    "prettier": "1.19.1",
+    "pretty-quick": "2.0.1",
+    "ts-node-dev": "1.0.0-pre.43",
+    "typescript": "3.6.4"
+  }
+}
