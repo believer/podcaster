@@ -1,0 +1,31 @@
+{
+  "name": "podcaster",
+  "refmt": 3,
+  "reason": {
+    "react-jsx": 3
+  },
+  "package-specs": {
+    "module": "es6",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "sources": [
+    {
+      "dir": "src",
+      "subdirs": true
+    }
+  ],
+  "bs-dependencies": [
+    "reason-react",
+    "reason-react-native",
+    "reason-react-navigation",
+    "reason-apollo",
+    "reason-apollo-hooks",
+    "react-from-svg"
+  ],
+  "ppx-flags": ["@baransu/graphql_ppx_re/ppx", "bs-let/ppx"],
+  "warnings": {
+    "number": "+A-4-9-40-42-48",
+    "error": "+A-3-40-42-44-102"
+  }
+}

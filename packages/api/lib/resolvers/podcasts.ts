@@ -5,6 +5,8 @@ export const typeDefs = gql`
   type PodcastEpisode {
     date: String!
     description: String!
+    duration: String!
+    id: ID!
     title: String!
     url: String!
   }

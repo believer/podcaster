@@ -4,11 +4,14 @@ import { Podcast } from '../__generated__/graphql'
 
 interface Enclosure {
   '@_url': string
+  '@_length': string
 }
 
 interface FeedItem {
   description: string
   enclosure: Enclosure
+  'itunes:duration': string
+  guid: string
   pubDate: string
   title: string
 }
@@ -41,12 +44,16 @@ export class FeedAPI extends RESTDataSource {
       link,
       title,
       image: image.url,
-      episodes: item.map(episode => ({
-        date: episode.pubDate,
-        description: episode.description,
-        title: episode.title,
-        url: episode.enclosure['@_url'],
-      })),
+      episodes: item.map(episode => {
+        return {
+          date: episode.pubDate,
+          description: episode.description,
+          duration: episode['itunes:duration'] || episode.enclosure['@_length'],
+          id: episode.guid,
+          title: episode.title,
+          url: episode.enclosure['@_url'],
+        }
+      }),
     }
   }
 
