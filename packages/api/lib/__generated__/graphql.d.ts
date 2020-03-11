@@ -19,6 +19,17 @@ export enum CacheControlScope {
   Private = 'PRIVATE'
 }
 
+export type Mutation = {
+   __typename?: 'Mutation',
+  _empty?: Maybe<Scalars['String']>,
+  search: Array<SearchResult>,
+};
+
+
+export type MutationSearchArgs = {
+  input: SearchInput
+};
+
 export type Podcast = {
    __typename?: 'Podcast',
   description: Scalars['String'],
@@ -32,16 +43,17 @@ export type PodcastEpisode = {
    __typename?: 'PodcastEpisode',
   date: Scalars['String'],
   description: Scalars['String'],
+  duration: Scalars['String'],
+  id: Scalars['ID'],
   title: Scalars['String'],
   url: Scalars['String'],
 };
 
 export type Query = {
    __typename?: 'Query',
-  hello?: Maybe<Scalars['String']>,
+  _empty?: Maybe<Scalars['String']>,
   latestEpisode: PodcastEpisode,
   podcast?: Maybe<Podcast>,
-  search: Array<SearchResult>,
 };
 
 
@@ -55,16 +67,16 @@ export type QueryPodcastArgs = {
   id: Scalars['ID']
 };
 
-
-export type QuerySearchArgs = {
+export type SearchInput = {
   limit?: Maybe<Scalars['Int']>,
-  query: Scalars['String']
+  query: Scalars['String'],
 };
 
 export type SearchResult = {
    __typename?: 'SearchResult',
   artist: Scalars['String'],
   artwork: Scalars['String'],
+  id: Scalars['ID'],
   genres: Array<Maybe<Scalars['String']>>,
   name: Scalars['String'],
   url: Scalars['String'],
@@ -148,6 +160,8 @@ export type ResolversTypes = {
   PodcastEpisode: ResolverTypeWrapper<PodcastEpisode>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Podcast: ResolverTypeWrapper<Podcast>,
+  Mutation: ResolverTypeWrapper<{}>,
+  SearchInput: SearchInput,
   SearchResult: ResolverTypeWrapper<SearchResult>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   CacheControlScope: CacheControlScope,
@@ -162,6 +176,8 @@ export type ResolversParentTypes = {
   PodcastEpisode: PodcastEpisode,
   Int: Scalars['Int'],
   Podcast: Podcast,
+  Mutation: {},
+  SearchInput: SearchInput,
   SearchResult: SearchResult,
   Boolean: Scalars['Boolean'],
   CacheControlScope: CacheControlScope,
@@ -170,6 +186,11 @@ export type ResolversParentTypes = {
 
 export type CacheControlDirectiveResolver<Result, Parent, ContextType = PodcastContext, Args = {   maxAge?: Maybe<Maybe<Scalars['Int']>>,
   scope?: Maybe<Maybe<CacheControlScope>> }> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+
+export type MutationResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  search?: Resolver<Array<ResolversTypes['SearchResult']>, ParentType, ContextType, RequireFields<MutationSearchArgs, 'input'>>,
+};
 
 export type PodcastResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['Podcast'] = ResolversParentTypes['Podcast']> = {
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -182,20 +203,22 @@ export type PodcastResolvers<ContextType = PodcastContext, ParentType extends Re
 export type PodcastEpisodeResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['PodcastEpisode'] = ResolversParentTypes['PodcastEpisode']> = {
   date?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  duration?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
 };
 
 export type QueryResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   latestEpisode?: Resolver<ResolversTypes['PodcastEpisode'], ParentType, ContextType, RequireFields<QueryLatestEpisodeArgs, 'id'>>,
   podcast?: Resolver<Maybe<ResolversTypes['Podcast']>, ParentType, ContextType, RequireFields<QueryPodcastArgs, 'limit' | 'id'>>,
-  search?: Resolver<Array<ResolversTypes['SearchResult']>, ParentType, ContextType, RequireFields<QuerySearchArgs, 'limit' | 'query'>>,
 };
 
 export type SearchResultResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['SearchResult'] = ResolversParentTypes['SearchResult']> = {
   artist?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   artwork?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
   genres?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   url?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -206,6 +229,7 @@ export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTyp
 }
 
 export type Resolvers<ContextType = PodcastContext> = {
+  Mutation?: MutationResolvers<ContextType>,
   Podcast?: PodcastResolvers<ContextType>,
   PodcastEpisode?: PodcastEpisodeResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,

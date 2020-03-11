@@ -1,11 +1,6 @@
 import { RESTDataSource, Response } from 'apollo-datasource-rest'
 import { ItunesResult } from '../types'
-import { SearchResult } from '../__generated__/graphql'
-
-interface SearchArgs {
-  limit: number
-  query: string
-}
+import { SearchResult, SearchInput } from '../__generated__/graphql'
 
 export class ItunesAPI extends RESTDataSource {
   constructor() {
@@ -30,11 +25,11 @@ export class ItunesAPI extends RESTDataSource {
     }))
   }
 
-  async search({ limit, query }: SearchArgs): Promise<SearchResult[]> {
+  async search({ limit, query }: SearchInput): Promise<SearchResult[]> {
     return this.get(`/search`, {
       term: query,
       entity: 'podcast',
-      limit,
+      limit: limit ? limit : 10,
     })
   }
 

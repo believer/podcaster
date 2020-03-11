@@ -15,7 +15,11 @@ import { FeedAPI } from './datasource/feed'
 
 const typeDefs = gql`
   type Query {
-    hello: String
+    _empty: String
+  }
+
+  type Mutation {
+    _empty: String
   }
 `
 

@@ -49,7 +49,10 @@ export class FeedAPI extends RESTDataSource {
           date: episode.pubDate,
           description: episode.description,
           duration: episode['itunes:duration'] || episode.enclosure['@_length'],
-          id: episode.guid,
+          id:
+            typeof episode.guid === 'object'
+              ? episode.guid['#text']
+              : episode.guid,
           title: episode.title,
           url: episode.enclosure['@_url'],
         }

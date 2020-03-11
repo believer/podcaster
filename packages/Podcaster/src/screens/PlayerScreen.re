@@ -60,8 +60,15 @@ let make = (~navigation as _, ~route as _) => {
       },
     );
 
+  let seek = position => {
+    switch (playerRef->React.Ref.current->Js.Nullable.toOption) {
+    | Some(player) => player##seek(state.position +. position)
+    | None => ()
+    };
+  };
+
   switch (currentEpisode) {
-  | Some({artwork, url}) =>
+  | Some({artwork, url, podcast, title}) =>
     <ScrollView contentContainerStyle=Style.(style(~flexGrow=1., ()))>
       <SafeAreaView style=Style.(style(~flex=1., ()))>
         <View
@@ -74,12 +81,9 @@ let make = (~navigation as _, ~route as _) => {
               (),
             )
           )>
-          <Sound.Video
+          <Sound
             ref=playerRef
-            ignoreSilentSwitch="ignore"
-            playInBackground=true
-            source={uri: url}
-            audioOnly=true
+            uri=url
             onLoad={t => {dispatch(Init(t.duration))}}
             onProgress={t => dispatch(SetSeekPosition(t.currentTime))}
             paused={PlayState.toBool(state.playState)}
@@ -88,19 +92,52 @@ let make = (~navigation as _, ~route as _) => {
               ->Belt.Float.fromString
               ->Belt.Option.getWithDefault(1.0)
             }
-            style=Style.(
-              style(~borderRadius=20., ~height=300.->dp, ~width=300.->dp, ())
-            )
             poster={artwork->Belt.Option.getWithDefault("")}
           />
+          <View style=Style.(style(~marginTop=32.->dp, ()))>
+            <Text
+              style=Style.(
+                textStyle(
+                  ~fontSize=21.,
+                  ~fontWeight=`_900,
+                  ~color="#1C2334",
+                  (),
+                )
+              )>
+              {React.string(title)}
+            </Text>
+            <Text
+              style=Style.(
+                textStyle(
+                  ~fontSize=14.,
+                  ~fontWeight=`_300,
+                  ~color="#BABDC7",
+                  (),
+                )
+              )>
+              {React.string(podcast)}
+            </Text>
+          </View>
           <View style=Style.(style(~width=100.->pct, ()))>
-            <CustomSlider
-              value={state.seekPosition}
-              minimumTrackTintColor="green"
-              maximumTrackTintColor="red"
-            />
-            <Text> {React.string(Duration.make(state.position))} </Text>
-            <Text> {React.string(Duration.make(state.duration))} </Text>
+            <View
+              style=Style.(
+                style(~flexDirection=`row, ~alignItems=`center, ())
+              )>
+              <Text style=Style.(style(~color="#1C2334", ~fontSize=12., ()))>
+                {React.string(Duration.make(state.position))}
+              </Text>
+              <View
+                style=Style.(style(~flex=1., ~marginHorizontal=16.->dp, ()))>
+                <CustomSlider
+                  value={state.seekPosition}
+                  minimumTrackTintColor="#FF6B7F"
+                  maximumTrackTintColor="#FBE0E3"
+                />
+              </View>
+              <Text style=Style.(style(~color="#1C2334", ~fontSize=12., ()))>
+                {React.string(Duration.make(state.duration))}
+              </Text>
+            </View>
             <View
               style=Style.(
                 style(
@@ -111,99 +148,32 @@ let make = (~navigation as _, ~route as _) => {
                   (),
                 )
               )>
-              <TouchableOpacity
-                style=Style.(
-                  style(
-                    ~backgroundColor="#333",
-                    ~alignItems=`center,
-                    ~justifyContent=`center,
-                    ~borderRadius=24.,
-                    ~width=48.->dp,
-                    ~height=48.->dp,
-                    ~marginRight=16.->dp,
-                    (),
-                  )
-                )
-                onPress={_ => {
-                  switch (playerRef->React.Ref.current->Js.Nullable.toOption) {
-                  | Some(player) => player##seek(state.position -. 15.)
-                  | None => ()
-                  }
-                }}>
-                <SVGBackward
-                  fill="white"
-                  width={24.->ReactFromSvg.Size.dp}
-                  height={24.->ReactFromSvg.Size.dp}
-                />
-              </TouchableOpacity>
+              <PlayerControl
+                control=SkipBackward
+                onPress={_ => seek(-15.)}
+                disabled={state.playState === Loading}
+              />
               {switch (state.playState) {
-               | Loading => React.null
-               | Paused =>
-                 <TouchableOpacity
-                   style=Style.(
-                     style(
-                       ~backgroundColor="#333",
-                       ~alignItems=`center,
-                       ~justifyContent=`center,
-                       ~borderRadius=30.,
-                       ~width=60.->dp,
-                       ~height=60.->dp,
-                       (),
-                     )
-                   )
-                   onPress={_ => dispatch(SetPlayState(Playing))}>
-                   <SVGPlay
-                     fill="white"
-                     width={24.->ReactFromSvg.Size.dp}
-                     height={24.->ReactFromSvg.Size.dp}
-                   />
-                 </TouchableOpacity>
+               | Loading as t
+               | Paused as t =>
+                 <PlayerControl
+                   disabled={t === Loading}
+                   control=Play
+                   size=Large
+                   onPress={_ => dispatch(SetPlayState(Playing))}
+                 />
                | Playing =>
-                 <TouchableOpacity
-                   style=Style.(
-                     style(
-                       ~backgroundColor="#333",
-                       ~alignItems=`center,
-                       ~justifyContent=`center,
-                       ~borderRadius=30.,
-                       ~width=60.->dp,
-                       ~height=60.->dp,
-                       (),
-                     )
-                   )
-                   onPress={_ => dispatch(SetPlayState(Paused))}>
-                   <SVGPause
-                     fill="white"
-                     width={24.->ReactFromSvg.Size.dp}
-                     height={24.->ReactFromSvg.Size.dp}
-                   />
-                 </TouchableOpacity>
+                 <PlayerControl
+                   control=Pause
+                   size=Large
+                   onPress={_ => dispatch(SetPlayState(Paused))}
+                 />
                }}
-              <TouchableOpacity
-                style=Style.(
-                  style(
-                    ~backgroundColor="#333",
-                    ~alignItems=`center,
-                    ~justifyContent=`center,
-                    ~borderRadius=24.,
-                    ~width=48.->dp,
-                    ~height=48.->dp,
-                    ~marginLeft=16.->dp,
-                    (),
-                  )
-                )
-                onPress={_ => {
-                  switch (playerRef->React.Ref.current->Js.Nullable.toOption) {
-                  | Some(player) => player##seek(state.position +. 15.)
-                  | None => ()
-                  }
-                }}>
-                <SVGForward
-                  fill="white"
-                  width={24.->ReactFromSvg.Size.dp}
-                  height={24.->ReactFromSvg.Size.dp}
-                />
-              </TouchableOpacity>
+              <PlayerControl
+                control=SkipForward
+                onPress={_ => seek(15.)}
+                disabled={state.playState === Loading}
+              />
             </View>
             <TextInput
               keyboardType=`decimalPad

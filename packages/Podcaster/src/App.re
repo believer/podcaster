@@ -5,8 +5,9 @@ module RootNavigator = {
 
   [@react.component]
   let make = () => {
-    <RootStack.Navigator initialRouteName="Home" headerMode=`none>
+    <RootStack.Navigator initialRouteName="Home">
       <RootStack.Screen name="Home" component=Home.make />
+      <RootStack.Screen name="Podcast" component=Podcast.make />
       <RootStack.Screen name="Player" component=PlayerScreen.make />
     </RootStack.Navigator>;
   };

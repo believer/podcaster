@@ -3,15 +3,17 @@ module Episode = {
     artwork: option(string),
     duration: string,
     url: string,
+    podcast: string,
     title: string,
   };
 
-  let make = (item, artwork) =>
+  let make = (~episode, ~podcast) =>
     Some({
-      artwork,
-      duration: item##duration,
-      url: item##url,
-      title: item##title,
+      artwork: podcast##image,
+      duration: episode##duration,
+      url: episode##url,
+      podcast: podcast##title,
+      title: episode##title,
     });
 };
 

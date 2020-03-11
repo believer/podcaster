@@ -1,7 +1,7 @@
 open ReactNavigation;
 
 module M = {
-  type params = {uri: string};
+  type params = {id: string};
 };
 
 module RootStack = Stack.Make(M);
