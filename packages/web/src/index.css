@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --t2: 0.5rem;
+  --t4: 1rem;
+}
+
 html,
 body {
   @apply font-normal m-0 p-0;
@@ -9,4 +14,12 @@ body {
 
 .font-variant-tabular {
   font-variant-numeric: tabular-nums;
+}
+
+.column-2 > * + * {
+  margin-left: var(--t2);
+}
+
+.stack-4 > * + * {
+  margin-top: var(--t4);
 }
