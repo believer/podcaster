@@ -1,6 +1,8 @@
 [@react.component]
 let make = () => {
   let (playbackRate, setPlaybackRate) = React.useState(_ => 1.0);
+  let (query, setQuery) = React.useState(() => "");
+
   let playerState =
     Player.usePlayer(
       "https://dts.podtrac.com/redirect.mp3/rss.art19.com/episodes/4873dad1-e9af-4e46-8dad-ba01d6f6cba8.mp3",
@@ -16,6 +18,13 @@ let make = () => {
 
     <div
       className="w-screen h-screen flex flex-col justify-center items-center">
+      <input
+        onChange={event => {
+          let value = event->ReactEvent.Form.target##value;
+          setQuery(_ => value);
+        }}
+      />
+      <SearchResults query />
       <PlayerPosition player duration />
       <Layout.Stack align={Some(Layout.Center)} space={Some(Layout.Large)}>
         <Layout.Columns space={Some(Layout.Small)}>

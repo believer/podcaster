@@ -22,12 +22,6 @@ export enum CacheControlScope {
 export type Mutation = {
    __typename?: 'Mutation',
   _empty?: Maybe<Scalars['String']>,
-  search: Array<SearchResult>,
-};
-
-
-export type MutationSearchArgs = {
-  input: SearchInput
 };
 
 export type Podcast = {
@@ -54,6 +48,7 @@ export type Query = {
   _empty?: Maybe<Scalars['String']>,
   latestEpisode: PodcastEpisode,
   podcast?: Maybe<Podcast>,
+  search: Array<SearchResult>,
 };
 
 
@@ -67,9 +62,10 @@ export type QueryPodcastArgs = {
   id: Scalars['ID']
 };
 
-export type SearchInput = {
-  limit?: Maybe<Scalars['Int']>,
+
+export type QuerySearchArgs = {
   query: Scalars['String'],
+  limit?: Maybe<Scalars['Int']>
 };
 
 export type SearchResult = {
@@ -160,9 +156,8 @@ export type ResolversTypes = {
   PodcastEpisode: ResolverTypeWrapper<PodcastEpisode>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   Podcast: ResolverTypeWrapper<Podcast>,
-  Mutation: ResolverTypeWrapper<{}>,
-  SearchInput: SearchInput,
   SearchResult: ResolverTypeWrapper<SearchResult>,
+  Mutation: ResolverTypeWrapper<{}>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   CacheControlScope: CacheControlScope,
   Upload: ResolverTypeWrapper<Scalars['Upload']>,
@@ -176,9 +171,8 @@ export type ResolversParentTypes = {
   PodcastEpisode: PodcastEpisode,
   Int: Scalars['Int'],
   Podcast: Podcast,
-  Mutation: {},
-  SearchInput: SearchInput,
   SearchResult: SearchResult,
+  Mutation: {},
   Boolean: Scalars['Boolean'],
   CacheControlScope: CacheControlScope,
   Upload: Scalars['Upload'],
@@ -189,7 +183,6 @@ export type CacheControlDirectiveResolver<Result, Parent, ContextType = PodcastC
 
 export type MutationResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  search?: Resolver<Array<ResolversTypes['SearchResult']>, ParentType, ContextType, RequireFields<MutationSearchArgs, 'input'>>,
 };
 
 export type PodcastResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['Podcast'] = ResolversParentTypes['Podcast']> = {
@@ -213,6 +206,7 @@ export type QueryResolvers<ContextType = PodcastContext, ParentType extends Reso
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   latestEpisode?: Resolver<ResolversTypes['PodcastEpisode'], ParentType, ContextType, RequireFields<QueryLatestEpisodeArgs, 'id'>>,
   podcast?: Resolver<Maybe<ResolversTypes['Podcast']>, ParentType, ContextType, RequireFields<QueryPodcastArgs, 'limit' | 'id'>>,
+  search?: Resolver<Array<ResolversTypes['SearchResult']>, ParentType, ContextType, RequireFields<QuerySearchArgs, 'query' | 'limit'>>,
 };
 
 export type SearchResultResolvers<ContextType = PodcastContext, ParentType extends ResolversParentTypes['SearchResult'] = ResolversParentTypes['SearchResult']> = {

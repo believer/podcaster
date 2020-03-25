@@ -11,19 +11,14 @@ export const typeDefs = gql`
     url: String!
   }
 
-  input SearchInput {
-    limit: Int = 10
-    query: String!
-  }
-
-  extend type Mutation {
-    search(input: SearchInput!): [SearchResult!]!
+  extend type Query {
+    search(query: String!, limit: Int = 10): [SearchResult!]!
   }
 `
 
 export const resolvers: Resolvers = {
-  Mutation: {
-    search: async (_, { input }, { dataSources }) =>
-      dataSources.itunesAPI.search(input),
+  Query: {
+    search: async (_, args, { dataSources }) =>
+      dataSources.itunesAPI.search(args),
   },
 }
