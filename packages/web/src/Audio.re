@@ -14,5 +14,5 @@ external addListener: (t, string, Js.t('a) => unit) => unit =
   "addEventListener";
 
 [@bs.send]
-external removeListener: (t, Js.t('a) => unit) => unit =
+external removeListener: (t, string, Js.t('a) => unit) => unit =
   "removeEventListener";

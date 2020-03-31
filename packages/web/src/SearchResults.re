@@ -2,7 +2,7 @@ open ApolloHooks;
 
 module SearchQuery = [%graphql
   {|
-  query SearchMutation($query: String!) {
+  query SearchQuery($query: String!) {
     search(query: $query) {
       artist
       id
@@ -14,11 +14,20 @@ module SearchQuery = [%graphql
 ];
 
 [@react.component]
-let make = (~query) => {
+let make = (~query, ~setQuery) => {
+  let (podcastId, setPodcastId) = React.useState(() => None);
   let (result, _full) =
     useQuery(
-      ~variables=SearchQuery.makeVariables(~query, ()),
-      ~skip=Js.String.length(query) === 0,
+      ~variables=
+        SearchQuery.makeVariables(
+          ~query=
+            switch (query) {
+            | Some(q) => q
+            | None => ""
+            },
+          (),
+        ),
+      ~skip=Belt.Option.isNone(query),
       SearchQuery.definition,
     );
 
@@ -29,12 +38,20 @@ let make = (~query) => {
        <ul>
          {data##search
           ->Belt.Array.map(search => {
-              <li key={search##id}> {React.string(search##name)} </li>
+              <li
+                onClick={_ => {
+                  setQuery(_ => None);
+                  setPodcastId(_ => Some(search##id));
+                }}
+                key={search##id}>
+                {React.string(search##name)}
+              </li>
             })
           ->React.array}
        </ul>
      | NoData => React.null
      | Error(_) => <p> {React.string("Get off my lawn!")} </p>
      }}
+    <Podcast podcastId setPodcastId />
   </div>;
 };

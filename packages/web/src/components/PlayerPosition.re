@@ -9,7 +9,7 @@ let make = (~duration, ~player: Audio.t) => {
 
     player->Audio.addListener("timeupdate", timeUpdate);
 
-    Some(_ => {player->Audio.removeListener(timeUpdate)});
+    Some(_ => {player->Audio.removeListener("timeupdate", timeUpdate)});
   });
 
   <div className="flex items-center">

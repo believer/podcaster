@@ -19,8 +19,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@ahrefs/bs-emotion": "1.0.1",
     "@apollo/react-hooks": "^3.1.3",
     "@baransu/graphql_ppx_re": "^0.7.1",
+    "@davesnx/styled-ppx": "0.6.0",
     "bs-css-emotion": "^1.1.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",

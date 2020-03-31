@@ -24,14 +24,18 @@
     "reason-react",
     "bs-css-emotion",
     "reason-apollo",
-    "reason-apollo-hooks"
+    "reason-apollo-hooks",
+    "@ahrefs/bs-emotion"
   ],
   "bs-dev-dependencies": [
     "@glennsl/bs-jest",
     "bs-react-testing-library",
     "bs-jest-dom"
   ],
-  "ppx-flags": ["@baransu/graphql_ppx_re/ppx"],
+  "ppx-flags": [
+    "@baransu/graphql_ppx_re/ppx",
+    "@davesnx/styled-ppx/styled-ppx"
+  ],
   "refmt": 3,
   "warnings": {
     "number": "+A-9-40-42-48",
