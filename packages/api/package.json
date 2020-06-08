@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "apollo-datasource-rest": "^0.8.0",
-    "apollo-server-express": "2.9.6",
+    "apollo-server-express": "2.14.2",
     "express": "4.17.1",
     "fast-xml-parser": "3.16.0",
     "got": "10.6.0",
