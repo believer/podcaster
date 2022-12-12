@@ -21,7 +21,7 @@
   "dependencies": {
     "apollo-datasource-rest": "^0.8.0",
     "apollo-server-express": "2.14.2",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "fast-xml-parser": "3.16.0",
     "got": "10.6.0",
     "knex": "0.20.11",
